@@ -1,0 +1,15 @@
+# macOS
+.DS_Store
+
+# Env
+.env/
+env/
+
+# node_modules
+node_modules/
+
+# Vim
+.*.swp
+.*.swo
+.*.swn
+.*.swm
