@@ -9,7 +9,13 @@ env/
 node_modules/
 
 # Vim
-.*.swp
-.*.swo
-.*.swn
-.*.swm
+*.swp
+*.swo
+*.swn
+*.swm
+
+# SSO Secret
+config/secret/
+
+# Legacy
+*.old

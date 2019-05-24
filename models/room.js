@@ -5,7 +5,8 @@ const roomSchema = new Schema({
   _hostId: Schema.Types.ObjectId,
   is_conf: Boolean,
   is_live: Boolean,
-  users: [{uid: Schema.Types.ObjectId, is_present: Boolean}],
+//  users: [{uid: Schema.Types.ObjectId, is_present: Boolean}],
+  users: {type: Map, of: Boolean},
 });
 
 module.exports = mongoose.model('room', roomSchema);
