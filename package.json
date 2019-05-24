@@ -1,10 +1,10 @@
 {
   "name": "biseo",
   "version": "1.0.0",
-  "description": "",
+  "description": "sparcs-biseo backend server",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon app.js",
+    "start": "PORT=80 nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -12,7 +12,23 @@
   "dependencies": {
     "body-parser": "^1.19.0",
     "express": "^4.16.4",
+    "helmet": "^3.18.0",
+    "module-alias": "^2.2.0",
     "mongoose": "^5.5.6",
+    "morgan": "^1.9.1",
     "nodemon": "^1.19.0"
+  },
+  "_moduleAliases": {
+    "__Configuration__": "",
+    "@config": "config/config",
+    "@morganConfig": "config/logger/morgan",
+    "__Application__": "",
+    "@app": "app",
+    "__Router__": "",
+    "@router": "route/router",
+    "@authentication": "route/authentication",
+    "__Util__": "",
+    "@portSanitizer": "util/port/portSanitizer",
+    "@ssoClient": "util/sso/client"
   }
 }

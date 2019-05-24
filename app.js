@@ -1,21 +1,27 @@
-var express    = require('express');
-var app        = express();
-var bodyParser = require('body-parser');
-var mongoose   = require('mongoose');
+require("module-alias/register")
+require("@config")
+
+const path = require("path");
+const express = require('express');
+//const cors = require("cors");
+const helmet = require("helmet");
+const morgan = require("morgan");
+const morganConfig = require("@morganConfig").morgan
+
+const bodyParser = require('body-parser');
+const mongoose   = require('mongoose');
+
+const app = express();
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+//app.use(cors());
+app.use(helmet());
+app.use(morgan(morganConfig.stdout.format, morganConfig.stdout.option))
+app.use(morgan(morganConfig.stderr.format, morganConfig.stderr.option))
 
-/*
-var port = 80;
-var router = require('./routes')(app)
-
-var server = app.listen(port, function(){
-  console.log("Express server has started on port " + port)
-});
-*/
-
-var db = mongoose.connection;
+// Mongoose Basic Setting
+const db = mongoose.connection;
 db.on('error', console.error);
 db.once('open', () => {
   console.log("Successfully connected to mongod server");
@@ -23,13 +29,15 @@ db.once('open', () => {
 
 mongoose.connect('mongodb://localhost:27017/biseo', {useNewUrlParser: true});
 
-var User = require('./models/user');
-var Room = require('./models/room');
-var Vote = require('./models/vote');
+// Mongoose Models (User, Room, Vote)
+const User = require('./models/user');
+const Room = require('./models/room');
+const Vote = require('./models/vote');
 
-var port = 80;
-var router = require('./routes/')(app, User, Room, Vote)
 
-var server = app.listen(port, () => {
+const port = 80;
+const router = require('./route/router')(app, User, Room, Vote)
+
+const server = app.listen(port, () => {
   console.log("Server has started on port " + port);
 });

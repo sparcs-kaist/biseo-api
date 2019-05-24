@@ -8,9 +8,18 @@ module.exports = (App, User, Room, Vote) =>
                           email: "mango@sparcs.org",
                           is_admin: false,
                           type: -1});
-    mango.save(function(err, mango){
+    mango.save(function(err, user){
       if(err) return console.error(err);
     });
 */
+  });
+  App.post('/api/room/add', (req, res) => {
+    const isConf = req.body.is_conf;
+    const currentUserId = -1; 
+    var _room = new Room({
+      _hostId: currentUserId,
+      is_conf: isConf,
+      is_live: true
+    });
   });
 }
