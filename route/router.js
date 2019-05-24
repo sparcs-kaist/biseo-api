@@ -8,7 +8,7 @@ const Vote = require('@models/vote')
 router.get("/", (req, res) => {
     json_test = {response:'Hello, world'};
     res.json(json_test.response);
-    /*
+    
     var mango = new User({
         nickname: "mango",
         email: "mango@sparcs.org",
@@ -18,7 +18,7 @@ router.get("/", (req, res) => {
         if(err) return console.error(err);
         else console.log("Successfully saved.");
     });
-    */
+    
 });
 
 module.exports = router
