@@ -7,20 +7,21 @@ const express = require("express");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const morganConfig = require("@morganConfig").morgan
-
 const bodyParser = require("body-parser");
+const cookieParser = require('cookie-parser');
 const mongoose   = require("mongoose");
 
 const app = express();
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+app.use(cookieParser());
 //app.use(cors());
 app.use(helmet());
 app.use(morgan(morganConfig.stdout.format, morganConfig.stdout.option))
 app.use(morgan(morganConfig.stderr.format, morganConfig.stderr.option))
 
-// Mongoose Basic Setting
+// mongoose basic setting
 const db = mongoose.connection;
 db.on('error', console.error);
 db.once('open', () => {
@@ -29,20 +30,16 @@ db.once('open', () => {
 
 mongoose.connect("mongodb://localhost:27017/biseo", {useNewUrlParser: true});
 
-// Mongoose Models (User, Room, Vote)
-//const User = require('./models/user');
-//const Room = require('./models/room');
-//const Vote = require('./models/vote');
-
+// router setting
 const router = require("@router")
 const auth = require("@authentication")
 
 app.use("/api", router)
 app.use("/auth", auth)
 
+
+// set port and start server
 const port = process.env.PORT
-//const router = require('@router')(app, User, Room, Vote)
-//const auth = require('@authentication')(app, User)
 
 const server = app.listen(port, () => {
   console.log("Server has started on port " + port);

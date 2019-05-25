@@ -1,6 +1,9 @@
 const express = require("express")
 const router = express.Router()
 const ssoClient = require("@ssoClient")
+const jwt = require('jsonwebtoken')
+
+// load secret config
 const secretConfig = require("@secretConfig")
 
 // Models
@@ -22,12 +25,17 @@ router.get("/login", (req, res) => {
  */
 router.get("/login/callback", (req, res) => {
     client.getUserInfo(req.query.code).then((response) => {
-        console.log(response)
         if(response.hasOwnProperty("sparcs_id") === true){
             User.findOne({nickname: response.sparcs_id}, (err, user) => {
-                if(err) res.json({'success': false});
+                let success = true;
+                let targetUser = true;
+                if(err){
+                    res.json({'success': false});
+                    success = false;
+                }
                 if(user){
-                    res.json({'success': true, 'new': false});
+                    targetUser = user;
+                    //res.json({'success': true, 'new': false});
                 }else{
                     const _user = new User({
                         nickname: response.sparcs_id,
@@ -35,9 +43,18 @@ router.get("/login/callback", (req, res) => {
                         is_admin: false,
                         type: 0});
                     _user.save((err, user) => {
-                        if(err) res.json({'success': false});
-                        else res.json({'success': true, 'new': true});
+                        targetUser = user;
+                        if(err){
+                            res.json({'success': false});
+                            success = false;
+                        } //else res.json({'success': true, 'new': true});
                     });
+                }
+                if(success){
+                    let token = jwt.sign(JSON.stringify(targetUser),
+                            secretConfig.jwtSecretKey);
+                    res.cookie(secretConfig.cookieName, token);
+                    res.json({success: true, user: targetUser, msg: 'Hello, ' + response.sparcs_id});
                 }
             });
         }else{
